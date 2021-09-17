@@ -88,17 +88,31 @@ if __name__ == '__main__':
     print(prefs)
 
     allocation = probabilistic_serial(prefs)
-    print("Randomized allocation from serial eating procedure: ", allocation)
+    # print("Randomized allocation from serial eating procedure: ", allocation)
     bvn = birkhoff_von_neumann_decomposition(np.array(allocation))
-    print("\nBirkhoff von Neumann decomposition: ")
-    for coefficient, permutation_matrix in bvn:
-        print('coefficient:', coefficient)
-        print('permutation matrix:', permutation_matrix)
+    # print("\nBirkhoff von Neumann decomposition: ")
+    # for coefficient, permutation_matrix in bvn:
+    #     print('coefficient:', coefficient)
+    #     print('permutation matrix:', permutation_matrix)
 
-    alloc = sample_allocation(bvn)
-    print("\nFinal selected allocation: ")
-    for i in range(len(names_map)):
-        which_good_assigned = np.where(alloc[i, :])[0][0]
-        print("{} is assigned {}, which they scored {}".format(names_map[i], goods_map[which_good_assigned],
-                                                               original_scores[i][which_good_assigned]))
+    # alloc = sample_allocation(bvn)
+    # print("\nSampled allocation: ")
+    # for i in range(len(names_map)):
+    #     which_good_assigned = np.where(alloc[i, :])[0][0]
+    #     print("{} is assigned {}, which they scored {}".format(names_map[i], goods_map[which_good_assigned],
+    #                                                            original_scores[i][which_good_assigned]))
+
+    k = 5
+    print("\nTop {} allocations".format(k))
+    top_k = sorted(bvn, key=lambda x: x[0], reverse=True)[:k]
+    for coeff, alloc in top_k:
+        print()
+        print("Probability: %.3f" % coeff)
+        for i in range(len(names_map)):
+            which_good_assigned = np.where(alloc[i, :])[0][0]
+            print("{} is assigned {}, which they scored {}".format(names_map[i], goods_map[which_good_assigned],
+                                                                   original_scores[i][which_good_assigned]))
+        print()
+
+
 
